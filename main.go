@@ -13,9 +13,8 @@ func main() {
 	customFormatter.TimestampFormat = "2006-01-02 15:04:05"
 	log.SetFormatter(customFormatter)
 	customFormatter.FullTimestamp = true
-	log.Info("Building player")
-	player := players.RandomPlayer{}
-	log.Info("Player built")
+
+	player := players.InteractivePlayer{}
 	g := game.New(player)
 	score, lastPiece := g.Play()
 	fmt.Printf("Game over! Score: %d\n", score)

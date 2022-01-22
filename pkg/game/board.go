@@ -60,14 +60,61 @@ func (b Board) getPossibleLocations(piece Piece) []Location {
 
 func (b *Board) place(piece Piece, l Location) {
 	piece_x, piece_y := piece.Dimensions()
+	board := *b
+	size := len(board)
 	for j := 0; j < piece_y; j++ {
 		for i := 0; i < piece_x; i++ {
 			// If piece has a block at j, i
 			// fill in the board at j, i, offset by location
 			if piece[j][i] {
 				//fmt.Printf("ADDING at (%d %d)\n", j+l.y, i+l.x)
-				(*b)[j+l.Y][i+l.X] = true
+				board[j+l.Y][i+l.X] = true
 			}
+		}
+	}
+	// Clean rows and columns
+
+	fullRows := make([]int, 0)
+	fullColumns := make([]int, 0)
+
+	// Check for full rows
+	for j := 0; j < size; j++ {
+		isRowFull := true
+		for i := 0; i < size; i++ {
+			if !board[j][i] {
+				isRowFull = false
+				break
+			}
+		}
+		if isRowFull {
+			fullRows = append(fullRows, j)
+		}
+	}
+
+	// Check for full columns
+	for i := 0; i < size; i++ {
+		isColumnFull := true
+		for j := 0; j < size; j++ {
+			if !board[j][i] {
+				isColumnFull = false
+				break
+			}
+		}
+		if isColumnFull {
+			fullColumns = append(fullColumns, i)
+		}
+	}
+
+	// We can't clear as we we find them snice you might
+	// clear a column and row simultaneously
+	for _, row := range fullRows {
+		for i := 0; i < size; i++ {
+			board[row][i] = false
+		}
+	}
+	for _, column := range fullColumns {
+		for j := 0; j < size; j++ {
+			board[j][column] = false
 		}
 	}
 }
