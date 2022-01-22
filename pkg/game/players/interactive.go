@@ -1,19 +1,21 @@
-package game
+package players
 
 import (
 	"fmt"
 	"strconv"
+
+	"github.com/lukemassa/onezero/pkg/game"
 )
 
 type InteractivePlayer struct{}
 
-func (i InteractivePlayer) Decide(b Board, p Piece, locations []Location) int {
+func (i InteractivePlayer) Decide(b game.Board, p game.Piece, locations []game.Location) int {
 	fmt.Print("\033[H\033[2J")
 	b.Show()
 	p.Show()
 	fmt.Println("Options:")
 	for i := 0; i < len(locations); i++ {
-		fmt.Printf("%d: (%d %d)\n", i, locations[i].x, locations[i].y)
+		fmt.Printf("%d: (%d %d)\n", i, locations[i].X, locations[i].Y)
 	}
 	var input string
 	for {

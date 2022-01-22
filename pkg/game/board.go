@@ -9,8 +9,8 @@ const DEFAULT_BOARD_SIZE = 4
 type Board [][]bool
 
 type Location struct {
-	x int
-	y int
+	X int
+	Y int
 }
 
 func (b Board) Show() {
@@ -66,7 +66,7 @@ func (b *Board) place(piece Piece, l Location) {
 			// fill in the board at j, i, offset by location
 			if piece[j][i] {
 				//fmt.Printf("ADDING at (%d %d)\n", j+l.y, i+l.x)
-				(*b)[j+l.y][i+l.x] = true
+				(*b)[j+l.Y][i+l.X] = true
 			}
 		}
 	}

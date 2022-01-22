@@ -2,6 +2,8 @@ package game
 
 import (
 	"math/rand"
+
+	log "github.com/sirupsen/logrus"
 )
 
 type Game struct {
@@ -16,6 +18,7 @@ type Player interface {
 }
 
 func New(p Player) *Game {
+	log.Info("Start to build game")
 	size := DEFAULT_BOARD_SIZE
 	b := make([][]bool, size)
 	for i := range b {
@@ -27,6 +30,7 @@ func New(p Player) *Game {
 		pieces: getPiecees(),
 		player: p,
 	}
+	log.Info("Finished building game")
 	return &g
 }
 
@@ -38,6 +42,7 @@ func (g *Game) pickRandomPiece() Piece {
 func (g *Game) Play() (int, Piece) {
 	score := 0
 	for {
+		log.Info("Starting turn")
 		nextPiece := g.pickRandomPiece()
 		possibleLocations := g.board.getPossibleLocations(nextPiece)
 		if len(possibleLocations) == 0 {
@@ -47,6 +52,7 @@ func (g *Game) Play() (int, Piece) {
 		choice := possibleLocations[choiceIndex]
 		g.board.place(nextPiece, choice)
 		score += 1
+		log.Info("Finished turn")
 	}
 }
 
