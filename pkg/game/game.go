@@ -9,30 +9,36 @@ type Game struct {
 	board  Board
 	size   int
 	pieces []Piece
-	player Player
 }
 
+// A player that chooses a location from a list
 type Player interface {
 	Decide(Board, Piece, []Location) int
 }
 
-func New(p Player) *Game {
+// A player that is responsible for choosing a location
+// Nothing checks to make sure it is a valid location
+// If a move is not possible, the player should return nil
+type SmartPlayer interface {
+	Move(Board, Piece) *Location
+}
+
+func New() *Game {
 	size := DEFAULT_BOARD_SIZE
 	b := make([][]bool, size)
 	for i := range b {
 		b[i] = make([]bool, size)
 	}
-	return NewFromBoard(p, b)
+	return NewFromBoard(b)
 }
 
-func NewFromBoard(p Player, b Board) *Game {
+func NewFromBoard(b Board) *Game {
 	//log.Info("Start to build game")
 	size := len(b)
 	g := Game{
 		board:  b,
 		size:   size,
 		pieces: getPiecees(),
-		player: p,
 	}
 	//log.Info("Finished building game")
 	return &g
@@ -43,18 +49,34 @@ func (g *Game) pickRandomPiece() Piece {
 	return g.pieces[randomIndex]
 }
 
-func (g *Game) Play() (int, Piece) {
+func (g *Game) Play(p Player) (int, Piece) {
+	return g.play(func(nextPiece Piece) *Location {
+		possibleLocations := g.board.getPossibleLocations(nextPiece)
+		if len(possibleLocations) == 0 {
+			return nil
+		}
+		choiceIndex := p.Decide(g.board, nextPiece, possibleLocations)
+		choice := possibleLocations[choiceIndex]
+		return &choice
+	})
+}
+
+func (g *Game) PlaySmart(p SmartPlayer) (int, Piece) {
+	return g.play(func(nextPiece Piece) *Location {
+		return p.Move(g.board, nextPiece)
+	})
+}
+
+func (g *Game) play(chooseLocation func(Piece) *Location) (int, Piece) {
 	score := 0
 	for {
 		//log.Info("Starting turn")
 		nextPiece := g.pickRandomPiece()
-		possibleLocations := g.board.getPossibleLocations(nextPiece)
-		if len(possibleLocations) == 0 {
+		choice := chooseLocation(nextPiece)
+		if choice == nil {
 			return score, nextPiece
 		}
-		choiceIndex := g.player.Decide(g.board, nextPiece, possibleLocations)
-		choice := possibleLocations[choiceIndex]
-		g.board.place(nextPiece, choice)
+		g.board.place(nextPiece, *choice)
 		score += 1
 		//log.Info("Finished turn")
 	}
