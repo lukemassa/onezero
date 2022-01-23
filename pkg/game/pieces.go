@@ -54,7 +54,7 @@ func byteArrayToStringRepr(b []byte) string {
 	return sb.String()
 }
 
-func compilePiece(repr string) (Piece, error) {
+func convertToBoolArray(repr string) ([][]bool, error) {
 
 	x := 0
 	y := 0
@@ -66,7 +66,7 @@ func compilePiece(repr string) (Piece, error) {
 		y += 1
 		x = len(line)
 		for _, char := range line {
-			if char != 'X' && char != ' ' {
+			if char != 'X' && char != ' ' && char != '.' {
 				return nil, errors.New(fmt.Sprintf("Invalid char in repr: %c", char))
 			}
 		}
@@ -90,21 +90,43 @@ func compilePiece(repr string) (Piece, error) {
 	if !atLeastOneSquare {
 		return nil, errors.New("Must have at least one square in block")
 	}
-	return Piece(b), nil
+	return b, nil
 }
 
 func mustCompilePiece(repr string) Piece {
 
-	piece, err := compilePiece(repr)
+	piece, err := convertToBoolArray(repr)
 	if err != nil {
 		panic(err)
 	}
-	return piece
+	return Piece(piece)
 }
 
 func getPiecees() []Piece {
 	return []Piece{
-		mustCompilePiece("XX"),
+		// 1
 		mustCompilePiece("X"),
+		// 2
+		mustCompilePiece("XX"),
+		mustCompilePiece("X\nX"),
+
+		// 3
+		mustCompilePiece("XX\nX "),
+		mustCompilePiece("XX\n X"),
+		mustCompilePiece("X \nXX"),
+		mustCompilePiece(" X\nXX"),
+		mustCompilePiece("XXX"),
+		mustCompilePiece("X\nX\nX"),
+
+		// 4
+		mustCompilePiece("XXXX"),
+		mustCompilePiece("X\nX\nX\nX"),
+
+		// 5
+		mustCompilePiece("XXXXX"),
+		mustCompilePiece("X\nX\nX\nX\nX"),
+
+		// 9
+		mustCompilePiece("XXX\nXXX\nXXX"),
 	}
 }

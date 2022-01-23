@@ -4,13 +4,30 @@ import (
 	"fmt"
 )
 
-const DEFAULT_BOARD_SIZE = 4
+const DEFAULT_BOARD_SIZE = 12
 
 type Board [][]bool
 
 type Location struct {
 	X int
 	Y int
+}
+
+func NewBlankBoard() Board {
+	size := DEFAULT_BOARD_SIZE
+	b := make([][]bool, size)
+	for i := range b {
+		b[i] = make([]bool, size)
+	}
+	return b
+}
+
+func NewBoardFromString(s string) Board {
+	boolArray, err := convertToBoolArray(s)
+	if err != nil {
+		panic(err)
+	}
+	return Board(boolArray)
 }
 
 func (b Board) Show() {
@@ -38,8 +55,13 @@ func (b Board) getPossibleLocations(piece Piece) []Location {
 				for x := 0; x < piece_x; x++ {
 					test_x := i + x
 					test_y := j + y
-					// If this is out of range, or the spot is covered
-					if test_x >= size || test_y >= size || b[test_y][test_x] {
+					// If this is out of range, not valid
+					if test_x >= size || test_y >= size {
+						legalMove = false
+						break
+					}
+					// If overlap with piece, not valid
+					if b[test_y][test_x] && piece[y][x] {
 						legalMove = false
 						break
 					}

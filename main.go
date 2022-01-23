@@ -15,7 +15,8 @@ func main() {
 	customFormatter.FullTimestamp = true
 
 	player := players.InteractivePlayer{}
-	g := game.New(player)
+	//game.RunTrials(&player, 100)
+	g := game.New(&player)
 	score, lastPiece := g.Play()
 	fmt.Printf("Game over! Score: %d\n", score)
 	g.Show()
