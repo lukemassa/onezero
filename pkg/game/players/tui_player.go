@@ -86,6 +86,20 @@ func (i TUIPlayer) Move(b game.Board, p game.Piece) *game.Location {
 			}
 			continue
 		}
+		if ascii == 98 {
+			found := false
+			for i := 1; i < len(possibleLocations); i++ {
+				if possibleLocations[i].X == location.X && possibleLocations[i].Y == location.Y {
+					location = possibleLocations[i-1]
+					found = true
+					break
+				}
+			}
+			if !found {
+				location = possibleLocations[len(possibleLocations)-1]
+			}
+			continue
+		}
 		if keyCode == 0 {
 			if ascii == 13 {
 				// If it's valid, take it
