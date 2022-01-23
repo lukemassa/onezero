@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"time"
 
 	"github.com/lukemassa/onezero/pkg/game"
 	"github.com/lukemassa/onezero/pkg/game/players"
@@ -14,11 +14,12 @@ func main() {
 	log.SetFormatter(customFormatter)
 	customFormatter.FullTimestamp = true
 
-	player := players.InteractivePlayer{}
-	//game.RunTrials(&player, 100)
-	g := game.New(&player)
-	score, lastPiece := g.Play()
-	fmt.Printf("Game over! Score: %d\n", score)
-	g.Show()
-	fmt.Printf("Could not place piece:\n%s\n", lastPiece.String())
+	player := players.NewRandomPlayer()
+	//game.RunTrials(&player, 10)
+	game.RunTrialsByTime(&player, 10*time.Second)
+	// g := game.New(&player)
+	// score, lastPiece := g.Play()
+	// fmt.Printf("Game over! Score: %d\n", score)
+	// g.Show()
+	// fmt.Printf("Could not place piece:\n%s\n", lastPiece.String())
 }

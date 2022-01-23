@@ -11,11 +11,10 @@ type RandomPlayer struct {
 	rand rand.Rand
 }
 
-func NewRandomPlayer() *RandomPlayer {
-	r := RandomPlayer{
+func NewRandomPlayer() RandomPlayer {
+	return RandomPlayer{
 		rand: *rand.New(rand.NewSource(time.Now().UnixNano())),
 	}
-	return &r
 }
 
 func (r *RandomPlayer) Decide(b game.Board, p game.Piece, locations []game.Location) int {
