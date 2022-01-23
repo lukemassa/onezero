@@ -80,7 +80,8 @@ func (b Board) getPossibleLocations(piece Piece) []Location {
 	return ret
 }
 
-func (b *Board) place(piece Piece, l Location) {
+func (b *Board) Place(piece Piece, l Location) bool {
+	cleared := false
 	piece_x, piece_y := piece.Dimensions()
 	board := *b
 	size := len(board)
@@ -130,13 +131,16 @@ func (b *Board) place(piece Piece, l Location) {
 	// We can't clear as we we find them snice you might
 	// clear a column and row simultaneously
 	for _, row := range fullRows {
+		cleared = true
 		for i := 0; i < size; i++ {
 			board[row][i] = false
 		}
 	}
 	for _, column := range fullColumns {
+		cleared = true
 		for j := 0; j < size; j++ {
 			board[j][column] = false
 		}
 	}
+	return cleared
 }

@@ -23,7 +23,7 @@ func runTrials(p Player, isFinished func(int) bool) {
 	start := time.Now()
 	ctx := context.Background()
 	results := make(chan int)
-	for i := 0; i < 10; i++ {
+	for i := 0; i < 100; i++ {
 		go runTrialsWorker(ctx, p, results)
 	}
 	finished := false

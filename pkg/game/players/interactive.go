@@ -10,7 +10,7 @@ import (
 
 type InteractivePlayer struct{}
 
-func (i *InteractivePlayer) Decide(b game.Board, p game.Piece, locations []game.Location) int {
+func (i InteractivePlayer) Decide(b game.Board, p game.Piece, locations []game.Location) int {
 	fmt.Print("\033[H\033[2J")
 	b.Show()
 	p.Show()
@@ -36,7 +36,7 @@ func (i *InteractivePlayer) Decide(b game.Board, p game.Piece, locations []game.
 	}
 }
 
-func (i *InteractivePlayer) Move(b game.Board, p game.Piece) game.Location {
+func (i InteractivePlayer) Move(b game.Board, p game.Piece) game.Location {
 	fmt.Print("\033[H\033[2J")
 	size := len(b)
 	b.Show()

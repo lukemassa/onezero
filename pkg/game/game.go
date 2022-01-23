@@ -76,7 +76,7 @@ func (g *Game) play(chooseLocation func(Piece) *Location) (int, Piece) {
 		if choice == nil {
 			return score, nextPiece
 		}
-		g.board.place(nextPiece, *choice)
+		g.board.Place(nextPiece, *choice)
 		score += 1
 		//log.Info("Finished turn")
 	}

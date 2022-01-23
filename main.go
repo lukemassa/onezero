@@ -14,10 +14,10 @@ func main() {
 	log.SetFormatter(customFormatter)
 	customFormatter.FullTimestamp = true
 
-	//player := players.NewRandomPlayer()
-	player := players.UpperLeftPlayer{}
+	player := players.PreferClearingPlayer{}
+	//player := players.UpperLeftPlayer{}
 	//game.RunTrials(&player, 100_000)
-	game.RunTrialsByTime(&player, 1*time.Minute)
+	game.RunTrialsByTime(player, 5*time.Minute)
 	// g := game.New()
 	// score, lastPiece := g.Play(&player)
 	// fmt.Printf("Game over! Score: %d\n", score)
