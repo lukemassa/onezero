@@ -50,8 +50,13 @@ func (g *Game) pickRandomPiece() Piece {
 }
 
 func (g *Game) Play(p Player) (int, Piece) {
+
+	smartPlayer, hasSmartPlayer := p.(SmartPlayer)
+	if hasSmartPlayer {
+		return g.PlaySmart(smartPlayer)
+	}
 	return g.play(func(nextPiece Piece) *Location {
-		possibleLocations := g.board.getPossibleLocations(nextPiece)
+		possibleLocations := g.board.GetPossibleLocations(nextPiece)
 		if len(possibleLocations) == 0 {
 			return nil
 		}

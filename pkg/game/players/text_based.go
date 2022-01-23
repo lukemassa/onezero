@@ -8,9 +8,9 @@ import (
 	"github.com/lukemassa/onezero/pkg/game"
 )
 
-type InteractivePlayer struct{}
+type TextBasedPlayer struct{}
 
-func (i InteractivePlayer) Decide(b game.Board, p game.Piece, locations []game.Location) int {
+func (t TextBasedPlayer) Decide(b game.Board, p game.Piece, locations []game.Location) int {
 	fmt.Print("\033[H\033[2J")
 	b.Show()
 	p.Show()
@@ -36,12 +36,16 @@ func (i InteractivePlayer) Decide(b game.Board, p game.Piece, locations []game.L
 	}
 }
 
-func (i InteractivePlayer) Move(b game.Board, p game.Piece) game.Location {
+func (i TextBasedPlayer) Move(b game.Board, p game.Piece) *game.Location {
 	fmt.Print("\033[H\033[2J")
 	size := len(b)
 	b.Show()
 	p.Show()
 	fmt.Println("Options:")
+	possibleLocations := b.GetPossibleLocations(p)
+	if len(possibleLocations) == 0 {
+		return nil
+	}
 	var input string
 	for {
 		fmt.Print("Choice: ")
@@ -67,6 +71,12 @@ func (i InteractivePlayer) Move(b game.Board, p game.Piece) game.Location {
 		if y_coordinate < 0 || y_coordinate >= size {
 			continue
 		}
-		return game.Location{X: x_coordinate, Y: y_coordinate}
+		ret := game.Location{X: x_coordinate, Y: y_coordinate}
+		for i := 0; i < len(possibleLocations); i++ {
+			if ret.X == possibleLocations[i].X && ret.Y == possibleLocations[i].Y {
+				return &ret
+			}
+		}
+		fmt.Println("Not a valid move, try again")
 	}
 }

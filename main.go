@@ -1,8 +1,6 @@
 package main
 
 import (
-	"time"
-
 	"github.com/lukemassa/onezero/pkg/game"
 	"github.com/lukemassa/onezero/pkg/game/players"
 	log "github.com/sirupsen/logrus"
@@ -15,12 +13,11 @@ func main() {
 	customFormatter.FullTimestamp = true
 
 	//player := players.PreferClearingPlayer{}
-	player := players.RandomPlayer{}
-	//game.RunTrials(&player, 100_000)
-	game.RunTrialsByTime(player, 1*time.Minute)
-	// g := game.New()
-	// score, lastPiece := g.Play(&player)
-	// fmt.Printf("Game over! Score: %d\n", score)
-	// g.Show()
-	// fmt.Printf("Could not place piece:\n%s\n", lastPiece.String())
+	//	player := players.UpperLeftPlayer{}
+	// player := players.TextBasedPlayer{}
+	player := players.TUIPlayer{}
+	//game.RunTrials(&player, 100_00)
+	//game.RunTrialsByTime(player, 10*time.Second)
+	game.RunInteractive(player)
+
 }

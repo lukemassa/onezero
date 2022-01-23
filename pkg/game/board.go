@@ -44,7 +44,46 @@ func (b Board) Show() {
 	}
 }
 
-func (b Board) getPossibleLocations(piece Piece) []Location {
+func (b Board) ShowWithPotentialPiece(p Piece, l Location) {
+	fmt.Println("Board:")
+	size := len(b)
+	p_x, p_y := p.Dimensions()
+	for j := 0; j < size; j++ {
+		for i := 0; i < size; i++ {
+			potentialPiece := i >= l.X && j >= l.Y && i < l.X+p_x && j < l.Y+p_y && p[j-l.Y][i-l.X]
+			alreadyFilled := b[j][i]
+			if potentialPiece {
+				if alreadyFilled {
+					fmt.Print("?")
+				} else {
+					fmt.Print("o")
+				}
+			} else if alreadyFilled {
+				fmt.Print("X")
+			} else {
+				fmt.Print(".")
+			}
+		}
+		fmt.Println()
+	}
+}
+
+func (b Board) Overlaps(p Piece, l Location) bool {
+	size := len(b)
+	p_x, p_y := p.Dimensions()
+	for j := 0; j < size; j++ {
+		for i := 0; i < size; i++ {
+			potentialPiece := i >= l.X && j >= l.Y && i < l.X+p_x && j < l.Y+p_y && p[j-l.Y][i-l.X]
+			alreadyFilled := b[j][i]
+			if potentialPiece && alreadyFilled {
+				return true
+			}
+		}
+	}
+	return false
+}
+
+func (b Board) GetPossibleLocations(piece Piece) []Location {
 	ret := make([]Location, 0)
 	piece_x, piece_y := piece.Dimensions()
 	size := len(b)

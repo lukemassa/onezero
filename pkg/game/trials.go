@@ -11,6 +11,13 @@ import (
 
 //import log "github.com/sirupsen/logrus"
 
+func RunInteractive(p Player) {
+	g := New()
+	score, lastPiece := g.Play(p)
+	fmt.Printf("Game over! Score: %d\n", score)
+	g.Show()
+	fmt.Printf("Could not place piece:\n%s\n", lastPiece.String())
+}
 func RunTrials(p Player, numTrials int) {
 	runTrials(p, func(trial int) bool {
 		return trial == numTrials
@@ -48,6 +55,7 @@ func runTrials(p Player, isFinished func(int) bool) {
 }
 
 func runTrialsWorker(ctx context.Context, p Player, results chan int) {
+
 	for {
 		select {
 		case <-ctx.Done():
